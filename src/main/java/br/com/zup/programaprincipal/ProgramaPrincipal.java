@@ -4,9 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
-
-import CarroDAO.CarroDao;
-import CarroPOJO.CarroPojo;
+import br.com.zup.CarroDAO.CarroDao;
+import br.com.zup.CarroPOJO.Carro;
 import br.com.zup.conectionfactory.ConnectionFactory;
 
 public class ProgramaPrincipal {
@@ -21,7 +20,9 @@ public class ProgramaPrincipal {
 		System.out.println("\n[1] - Dar entrada em um veículo");
 		System.out.println("[2] - Dar saída em um veículo");
 		System.out.println("[3] - Buscar um veículo");
-		System.out.println("[4] - Listar veículos estacionados");
+		System.out.println("[4] - Alterar cor de um veículo");
+		System.out.println("[5] - Listar veículos por marca");
+		System.out.println("[6] - Listar veículos estacionados");
 		System.out.println("[0] - Encerrar o programa");
 	}
 
@@ -39,7 +40,7 @@ public class ProgramaPrincipal {
 		System.out.print("\nInforme o modelo do veículo: ");
 		String modeloVeículo = sc.next();
 
-		CarroPojo carropojo = new CarroPojo(placaVeiculo, corVeiculo, marcaVeiculo, modeloVeículo);
+		Carro carropojo = new Carro(placaVeiculo, corVeiculo, marcaVeiculo, modeloVeículo);
 
 		carroDao.registraEntradaVeiculo(carropojo);
 
@@ -62,13 +63,38 @@ public class ProgramaPrincipal {
 
 	}
 	
+	public static void alterarCorDoVeiculo(Scanner sc, CarroDao carroDao) {
+		
+		System.out.print("\nInforme a placa do veículo que terá a cor alterada: ");
+		String placaVeiculo = sc.next();
+		
+		System.out.print("\nQual será a nova cor do veículo? ");
+		String novaCor = sc.next();
+		
+		carroDao.alteraCorDoVeiculo(placaVeiculo, novaCor);
+	}
+	
+	public static void listarVeiculosPorMarca(Scanner sc, CarroDao carroDao) {
+		
+		System.out.print("\nInforme a marca de veículo que deseja consultar: ");
+		String marcaVeiculo = sc.next();
+		
+		List<Carro> listaVeiculosPorMarca = carroDao.listaCarroPorMarca(marcaVeiculo);
+		
+		System.out.printf("\nRelação de carros da marca %s: \n\n", marcaVeiculo);
+		
+		for (Carro carros : listaVeiculosPorMarca) {
+			System.out.println(carros);
+		}
+	}
+
 	public static void listarVeiculosEstacionados(Scanner sc, CarroDao carroDao) {
-		
-		List<CarroPojo> listaVeiculosEstacionados = carroDao.listarVeiculosEstacionados();
-		
+
+		List<Carro> listaVeiculosEstacionados = carroDao.listarVeiculosEstacionados();
+
 		System.out.println("\nRelação dos veículos estacionados: \n");
-		
-		for (CarroPojo carros : listaVeiculosEstacionados) {
+
+		for (Carro carros : listaVeiculosEstacionados) {
 			System.out.println(carros);
 		}
 	}
@@ -105,9 +131,21 @@ public class ProgramaPrincipal {
 				consultarVeiculo(sc, carroDao);
 
 				break;
-
-			case "4":
 				
+			case "4":
+
+				alterarCorDoVeiculo(sc, carroDao);
+
+				break;
+
+			case "5":
+
+				listarVeiculosPorMarca(sc, carroDao);
+
+				break;
+
+			case "6":
+
 				listarVeiculosEstacionados(sc, carroDao);
 
 				break;
@@ -120,13 +158,13 @@ public class ProgramaPrincipal {
 
 			default:
 
-				System.out.println("\nOpção inválida. Escolha uma opção de 0 a 4.\n");
+				System.out.println("\nOpção inválida. Escolha uma opção de 0 a 6.\n");
 
 				break;
 			}
 
 		} while (!opcao.equals("0"));
-		
+
 		sc.close();
 		conn.close();
 

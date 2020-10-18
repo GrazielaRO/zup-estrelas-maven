@@ -1,25 +1,30 @@
-package CarroPOJO;
+package br.com.zup.CarroPOJO;
 
-public class CarroPojo {
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
+public class Carro {
+	
+	@Id
 	private String placa;
 	private String cor;
 	private String marca;
 	private String modelo;
 	
-	public CarroPojo(String placa, String cor, String marca, String modelo) {
+	public Carro(String placa, String cor, String marca, String modelo) {
 		this.placa = placa;
 		this.cor = cor;
 		this.marca = marca;
 		this.modelo = modelo;
 	}
 	
-	public CarroPojo() {
+	public Carro() {
 		
 	}
 
 	public String toString() {
-		return "Placa: " + placa + "| Cor: " + cor + "| Marca :" + marca + "| Modelo: " + modelo;
+		return "Placa: " + placa + " | Cor: " + cor + " | Marca :" + marca + " | Modelo: " + modelo;
 	}
 
 	public String getPlaca() {
